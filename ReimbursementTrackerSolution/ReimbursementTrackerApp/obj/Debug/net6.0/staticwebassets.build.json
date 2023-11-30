@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "UeEPk9ZEhxHFqq9EaS4t32CqCdwdFxLwkLlCe/R51fE=",
+  "Source": "ReimbursementTrackerApp",
+  "BasePath": "_content/ReimbursementTrackerApp",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
