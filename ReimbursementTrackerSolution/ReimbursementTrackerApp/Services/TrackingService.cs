@@ -9,15 +9,27 @@ using ReimbursementTrackerApp.Repositories;
 
 namespace ReimbursementTrackerApp.Services
 {
+    /// <summary>
+    /// Service class for managing tracking information related to reimbursement requests.
+    /// </summary>
     public class TrackingService : ITrackingService
     {
         private readonly IRepository<int, Tracking> _trackingRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TrackingService"/> class.
+        /// </summary>
+        /// <param name="trackingRepository">The repository for tracking information.</param>
         public TrackingService(IRepository<int, Tracking> trackingRepository)
         {
             _trackingRepository = trackingRepository;
         }
 
+        /// <summary>
+        /// Adds tracking information for a reimbursement request.
+        /// </summary>
+        /// <param name="trackingDTO">Tracking information to be added.</param>
+        /// <returns>Returns true if the addition is successful; otherwise, throws a TrackingNotFoundException.</returns>
         public bool Add(TrackingDTO trackingDTO)
         {
             try
@@ -42,10 +54,16 @@ namespace ReimbursementTrackerApp.Services
             }
             catch (Exception)
             {
+                // Log the exception or handle it as needed
                 throw new ServiceException();
             }
         }
 
+        /// <summary>
+        /// Removes tracking information based on the tracking ID.
+        /// </summary>
+        /// <param name="trackingId">The ID of the tracking information to be removed.</param>
+        /// <returns>Returns true if the removal is successful; otherwise, throws a TrackingNotFoundException.</returns>
         public bool Remove(int trackingId)
         {
             try
@@ -66,6 +84,11 @@ namespace ReimbursementTrackerApp.Services
             }
         }
 
+        /// <summary>
+        /// Updates tracking information based on the provided TrackingDTO.
+        /// </summary>
+        /// <param name="trackingDTO">Updated tracking information.</param>
+        /// <returns>Returns the updated TrackingDTO if the update is successful; otherwise, throws a TrackingNotFoundException.</returns>
         public TrackingDTO Update(TrackingDTO trackingDTO)
         {
             try
@@ -87,10 +110,17 @@ namespace ReimbursementTrackerApp.Services
             }
             catch (Exception)
             {
+                // Log the exception or handle it as needed
                 throw new ServiceException();
             }
         }
 
+        /// <summary>
+        /// Updates tracking information based on the request ID and tracking status.
+        /// </summary>
+        /// <param name="requestId">The ID of the reimbursement request.</param>
+        /// <param name="trackingStatus">The updated tracking status.</param>
+        /// <returns>Returns the updated TrackingDTO if the update is successful; otherwise, throws a TrackingNotFoundException.</returns>
         public TrackingDTO Update(int requestId, string trackingStatus)
         {
             try
@@ -124,10 +154,16 @@ namespace ReimbursementTrackerApp.Services
             }
             catch (Exception)
             {
+                // Log the exception or handle it as needed
                 throw new ServiceException();
             }
         }
 
+        /// <summary>
+        /// Gets tracking information based on the request ID.
+        /// </summary>
+        /// <param name="requestId">The ID of the reimbursement request.</param>
+        /// <returns>Returns the TrackingDTO if the tracking information is found; otherwise, throws a TrackingNotFoundException.</returns>
         public TrackingDTO GetTrackingByRequestId(int requestId)
         {
             try
@@ -156,6 +192,11 @@ namespace ReimbursementTrackerApp.Services
             }
         }
 
+        /// <summary>
+        /// Gets tracking information based on the tracking ID.
+        /// </summary>
+        /// <param name="trackingId">The ID of the tracking information to retrieve.</param>
+        /// <returns>Returns the TrackingDTO if the tracking information is found; otherwise, throws a TrackingNotFoundException.</returns>
         public TrackingDTO GetTrackingByTrackingId(int trackingId)
         {
             try
@@ -183,6 +224,10 @@ namespace ReimbursementTrackerApp.Services
             }
         }
 
+        /// <summary>
+        /// Gets all tracking information.
+        /// </summary>
+        /// <returns>Returns a collection of TrackingDTO representing all tracking information.</returns>
         public IEnumerable<TrackingDTO> GetAllTrackings()
         {
             try

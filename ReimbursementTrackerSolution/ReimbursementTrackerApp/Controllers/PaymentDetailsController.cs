@@ -1,5 +1,4 @@
-﻿// PaymentDetailsController.cs
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using ReimbursementTrackerApp.Interfaces;
 using ReimbursementTrackerApp.Models.DTOs;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +8,9 @@ using ReimbursementTrackerApp.Exceptions;
 
 namespace ReimbursementTrackerApp.Controllers
 {
+    /// <summary>
+    /// API controller for managing payment details.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [EnableCors("reactApp")]
@@ -17,12 +19,22 @@ namespace ReimbursementTrackerApp.Controllers
         private readonly IPaymentDetailsService _paymentDetailsService;
         private readonly ILogger<PaymentDetailsController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PaymentDetailsController"/> class.
+        /// </summary>
+        /// <param name="paymentDetailsService">The payment details service.</param>
+        /// <param name="logger">The logger.</param>
         public PaymentDetailsController(IPaymentDetailsService paymentDetailsService, ILogger<PaymentDetailsController> logger)
         {
             _paymentDetailsService = paymentDetailsService;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Adds payment details.
+        /// </summary>
+        /// <param name="paymentDetailsDTO">The payment details DTO.</param>
+        /// <returns>Returns the result of the operation.</returns>
         [HttpPost]
         public IActionResult AddPaymentDetails([FromBody] PaymentDetailsDTO paymentDetailsDTO)
         {
@@ -45,6 +57,11 @@ namespace ReimbursementTrackerApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Removes payment details.
+        /// </summary>
+        /// <param name="paymentId">The ID of the payment details to be removed.</param>
+        /// <returns>Returns the result of the operation.</returns>
         [HttpDelete("{paymentId}")]
         public ActionResult RemovePaymentDetails(int paymentId)
         {
@@ -74,6 +91,11 @@ namespace ReimbursementTrackerApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates payment details.
+        /// </summary>
+        /// <param name="paymentDetailsDTO">The updated payment details DTO.</param>
+        /// <returns>Returns the result of the operation.</returns>
         [HttpPut]
         public IActionResult UpdatePaymentDetails([FromBody] PaymentDetailsDTO paymentDetailsDTO)
         {
@@ -103,6 +125,11 @@ namespace ReimbursementTrackerApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets payment details by ID.
+        /// </summary>
+        /// <param name="paymentId">The ID of the payment details to be retrieved.</param>
+        /// <returns>Returns the payment details DTO if found; otherwise, returns an error message.</returns>
         [HttpGet("{paymentId}")]
         public IActionResult GetPaymentDetailsById(int paymentId)
         {
@@ -132,6 +159,10 @@ namespace ReimbursementTrackerApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets all payment details.
+        /// </summary>
+        /// <returns>Returns a list of payment details DTOs if available; otherwise, returns an error message.</returns>
         [HttpGet]
         public IActionResult GetAllPaymentDetails()
         {
@@ -151,4 +182,3 @@ namespace ReimbursementTrackerApp.Controllers
         }
     }
 }
-

@@ -8,6 +8,9 @@ using ReimbursementTrackerApp.Exceptions;
 
 namespace ReimbursementTrackerApp.Controllers
 {
+    /// <summary>
+    /// Controller for managing tracking-related operations through RESTful API.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [EnableCors("reactApp")]
@@ -15,15 +18,23 @@ namespace ReimbursementTrackerApp.Controllers
     {
         private readonly IRequestService _requestService;
         private readonly ILogger<RequestController> _logger;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RequestController"/> class.
+        /// </summary>
+        /// <param name="requestService">The service for managing request-related operations.</param>
+        /// <param name="logger">The logger for logging events in the controller.</param>
         public RequestController(IRequestService requestService, ILogger<RequestController> logger)
         {
             _requestService = requestService;
             _logger = logger;
         }
-
+        /// <summary>
+        /// Adds a new request.
+        /// </summary>
+        /// <param name="requestDTO">The data for the new request.</param>
+        /// <returns>The result of the request addition operation.</returns>
         [HttpPost]
-        public IActionResult AddRequest([FromBody] RequestDTO requestDTO)
+        public IActionResult AddRequest([FromForm] RequestDTO requestDTO)
         {
             _logger.LogInformation("Adding a request.");
 
@@ -43,7 +54,11 @@ namespace ReimbursementTrackerApp.Controllers
                 return BadRequest("Failed to add request");
             }
         }
-
+        /// <summary>
+        /// Removes a request by ID.
+        /// </summary>
+        /// <param name="requestId">The ID of the request to be removed.</param>
+        /// <returns>The result of the request removal operation.</returns>
         [HttpDelete("{requestId}")]
         public ActionResult RemoveRequest(int requestId)
         {
@@ -72,9 +87,13 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
+        /// <summary>
+        /// Updates a request.
+        /// </summary>
+        /// <param name="requestDTO">The data for updating the request.</param>
+        /// <returns>The result of the request update operation.</returns>
         [HttpPut]
-        public IActionResult UpdateRequest([FromBody] RequestDTO requestDTO)
+        public IActionResult UpdateRequest([FromForm] RequestDTO requestDTO)
         {
             _logger.LogInformation($"Updating request with ID {requestDTO.RequestId}.");
 
@@ -101,7 +120,11 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
+        /// <summary>
+        /// Gets a request by ID.
+        /// </summary>
+        /// <param name="requestId">The ID of the request to be retrieved.</param>
+        /// <returns>The result of the request retrieval operation.</returns>
         [HttpGet("{requestId}")]
         public IActionResult GetRequestById(int requestId)
         {
@@ -130,7 +153,10 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
+        /// <summary>
+        /// Gets all requests.
+        /// </summary>
+        /// <returns>The result of the operation to get all requests.</returns>
         [HttpGet]
         public IActionResult GetAllRequests()
         {
@@ -148,28 +174,11 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
-        [HttpPut("{requestId}/{trackingStatus}")]
-        public IActionResult UpdateRequestStatus(int requestId, string trackingStatus)
-        {
-            _logger.LogInformation($"Updating request status with ID {requestId} to {trackingStatus}.");
-
-            try
-            {
-                var result = _requestService.Update(requestId, trackingStatus);
-                return Ok(result);
-            }
-            catch (RequestNotFoundException ex)
-            {
-                _logger.LogError(ex, $"Failed to update request status.");
-                return NotFound($"Failed to update request status. {ex.Message}");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error updating request status.");
-                return StatusCode(500, "Internal server error");
-            }
-        }
+        /// <summary>
+        /// Gets a request by expense category.
+        /// </summary>
+        /// <param name="expenseCategory">The expense category of the request.</param>
+        /// <returns>The result of the request retrieval by category operation.</returns>
 
         [HttpGet("category/{expenseCategory}")]
         public IActionResult GetRequestByCategory(string expenseCategory)
@@ -178,7 +187,7 @@ namespace ReimbursementTrackerApp.Controllers
 
             try
             {
-                var requestDTO = _requestService.GetRequestByCategory(expenseCategory);
+                var requestDTO = _requestService.GetRequestsByCategory(expenseCategory);
 
                 if (requestDTO != null)
                 {
@@ -199,7 +208,11 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
-
+        /// <summary>
+        /// Gets requests by username.
+        /// </summary>
+        /// <param name="username">The username associated with the requests.</param>
+        /// <returns>The result of the requests retrieval by username operation.</returns>
         [HttpGet("user/{username}")]
         public IActionResult GetRequestByUsername(string username)
         {

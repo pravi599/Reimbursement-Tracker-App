@@ -81,10 +81,6 @@ namespace ReimbursementTrackerApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Receipt")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("RequestDate")
                         .HasColumnType("datetime2");
 

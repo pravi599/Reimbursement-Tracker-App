@@ -10,31 +10,20 @@ namespace ReimbursementTrackerApp.Services
         private readonly IRepository<int, Request> _requestRepository;
         private readonly IRepository<int, Tracking> _trackingRepository;
         private readonly IRepository<string, User> _userRepository;
+        private readonly IWebHostEnvironment _hostingEnvironment;
 
         public RequestService(
             IRepository<int, Request> requestRepository,
             IRepository<int, Tracking> trackingRepository,
-            IRepository<string, User> userRepository)
+            IRepository<string, User> userRepository,
+            IWebHostEnvironment hostingEnvironment)
         {
             _requestRepository = requestRepository;
             _trackingRepository = trackingRepository;
             _userRepository = userRepository;
+            _hostingEnvironment = hostingEnvironment; // Assign IWebHostEnvironment
         }
 
-        private RequestDTO CreateRequestDTOFromModel(Request request)
-        {
-            return new RequestDTO
-            {
-                RequestId = request.RequestId,
-                ExpenseCategory = request.ExpenseCategory,
-                Amount = request.Amount,
-                Document = request.Document,
-                //Receipt = request.Receipt,
-                Description = request.Description,
-                RequestDate = request.RequestDate,
-                Username = request.Username
-            };
-        }
 
         public bool Add(RequestDTO requestDTO)
         {
@@ -43,12 +32,14 @@ namespace ReimbursementTrackerApp.Services
 
             if (user != null)
             {
+                // Handle file upload separately
+                var documentPath = SaveDocument(requestDTO.Document);
+
                 var request = new Request
                 {
                     ExpenseCategory = requestDTO.ExpenseCategory,
                     Amount = requestDTO.Amount,
-                    Document = requestDTO.Document,
-                    //Receipt = requestDTO.Receipt,
+                    Document = documentPath,
                     Description = requestDTO.Description,
                     RequestDate = DateTime.Now,
                     Username = requestDTO.Username
@@ -72,6 +63,27 @@ namespace ReimbursementTrackerApp.Services
             throw new UserNotFoundException();
         }
 
+
+        private string SaveDocument(IFormFile document)
+        {
+            if (document != null && document.Length > 0)
+            {
+                var uploadsFolder = Path.Combine(_hostingEnvironment.WebRootPath, "Images");
+                var uniqueFileName = Guid.NewGuid().ToString() + "_" + document.FileName;
+                var filePath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    document.CopyTo(stream);
+                }
+
+                return "https://localhost:7007/Images/" + uniqueFileName;
+            }
+
+            return null;
+        }
+
+
         public bool Remove(int requestId)
         {
             var request = _requestRepository.Delete(requestId);
@@ -92,43 +104,36 @@ namespace ReimbursementTrackerApp.Services
             {
                 existingRequest.ExpenseCategory = requestDTO.ExpenseCategory;
                 existingRequest.Amount = requestDTO.Amount;
-                existingRequest.Document = requestDTO.Document;
-                //existingRequest.Receipt = requestDTO.Receipt;
                 existingRequest.Description = requestDTO.Description;
+                existingRequest.RequestDate = requestDTO.RequestDate;
+
+
+                // Update the document only if a new file is provided
+                if (requestDTO.Document != null)
+                {
+                    var documentPath = SaveDocument(requestDTO.Document);
+                    existingRequest.Document = documentPath;
+
+                    /*                    // Save the new file to wwwroot/Images
+                                        var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, "Images", requestDTO.Document.FileName);
+                                        using (var stream = new FileStream(imagePath, FileMode.Create))
+                                        {
+                                            requestDTO.Document.CopyTo(stream);
+                                        }*/
+
+                    //existingRequest.Document = "https://localhost:7007/Images/" + requestDTO.Document.FileName; // Adjust the path
+                }
 
                 _requestRepository.Update(existingRequest);
 
-                return CreateRequestDTOFromModel(existingRequest);
+                return requestDTO;
             }
 
             throw new RequestNotFoundException();
         }
 
-        public RequestDTO Update(int requestId, string trackingStatus)
-        {
-            var existingRequest = _requestRepository.GetById(requestId);
 
-            if (existingRequest != null)
-            {
-                var existingTracking = _trackingRepository.GetAll()
-                    .FirstOrDefault(t => t.RequestId == requestId);
 
-                if (existingTracking != null)
-                {
-                    existingTracking.TrackingStatus = trackingStatus;
-                    _trackingRepository.Update(existingTracking);
-
-                    return CreateRequestDTOFromModel(existingRequest);
-                }
-                else
-                {
-                    // Handle the case where tracking information is not found for the request.
-                    throw new TrackingNotFoundException();
-                }
-            }
-
-            throw new RequestNotFoundException();
-        }
 
         public RequestDTO GetRequestById(int requestId)
         {
@@ -136,53 +141,109 @@ namespace ReimbursementTrackerApp.Services
 
             if (existingRequest != null)
             {
-                return CreateRequestDTOFromModel(existingRequest);
+                var requestDto = new RequestDTO
+                {
+                    RequestId = existingRequest.RequestId,
+                    Username = existingRequest.Username,
+                    ExpenseCategory = existingRequest.ExpenseCategory,
+                    Amount = existingRequest.Amount,
+                    Description = existingRequest.Description,
+                    RequestDate = existingRequest.RequestDate,
+                    Document = GetDocumentAsFormFile(existingRequest.Document)
+                };
+
+                return requestDto;
             }
 
             throw new RequestNotFoundException();
         }
 
-        public RequestDTO GetRequestByCategory(string expenseCategory)
+
+
+
+        public Request GetRequestsByCategory(string expenseCategory)
         {
             var existingRequest = _requestRepository.GetAll()
                 .FirstOrDefault(r => r.ExpenseCategory == expenseCategory);
 
             if (existingRequest != null)
             {
-                return CreateRequestDTOFromModel(existingRequest);
+                return new Request
+                {
+                    RequestId = existingRequest.RequestId,
+                    ExpenseCategory = existingRequest.ExpenseCategory,
+                    Amount = existingRequest.Amount,
+                    Description = existingRequest.Description,
+                    RequestDate = existingRequest.RequestDate,
+                    Document = existingRequest.Document,
+                    Username = existingRequest.Username
+                };
             }
 
             throw new RequestNotFoundException();
         }
-
-        public IEnumerable<RequestDTO> GetRequestsByUsername(string username)
+        public IEnumerable<Request> GetRequestsByUsername(string username)
         {
             var requests = _requestRepository.GetAll()
-            .Where(r => r.User.Username == username).ToList();
+                .Where(r => r.Username == username);
 
-            var requestDTOs = new List<RequestDTO>();
-
-            foreach (var existingRequest in requests)
+            return requests.Select(existingRequest => new Request
             {
-                requestDTOs.Add(CreateRequestDTOFromModel(existingRequest));
-            }
-
-            return requestDTOs;
+                RequestId = existingRequest.RequestId,
+                ExpenseCategory = existingRequest.ExpenseCategory,
+                Amount = existingRequest.Amount,
+                Description = existingRequest.Description,
+                RequestDate = existingRequest.RequestDate,
+                Document = existingRequest.Document,
+                Username = existingRequest.Username
+            }).ToList();
         }
 
-        public IEnumerable<RequestDTO> GetAllRequests()
+        public IEnumerable<Request> GetAllRequests()
         {
             var requests = _requestRepository.GetAll();
 
-            var requestDTOs = new List<RequestDTO>();
-
-            foreach (var existingRequest in requests)
+            return requests.Select(existingRequest => new Request
             {
-                requestDTOs.Add(CreateRequestDTOFromModel(existingRequest));
+                RequestId = existingRequest.RequestId,
+                ExpenseCategory = existingRequest.ExpenseCategory,
+                Amount = existingRequest.Amount,
+                Description = existingRequest.Description,
+                RequestDate = existingRequest.RequestDate,
+                Document = existingRequest.Document,
+                Username = existingRequest.Username
+            }).ToList();
+        }
+
+
+        private IFormFile GetDocumentAsFormFile(string documentPath)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(documentPath))
+                {
+                    var imagePath = Path.Combine(_hostingEnvironment.WebRootPath, documentPath);
+
+                    if (File.Exists(imagePath))
+                    {
+                        var fileBytes = File.ReadAllBytes(imagePath);
+                        var memoryStream = new MemoryStream(fileBytes);
+                        return new FormFile(memoryStream, 0, fileBytes.Length, "Document", Path.GetFileName(imagePath));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the exception or handle it according to your application's needs.
+                Console.WriteLine($"Error loading document: {ex.Message}");
             }
 
-            return requestDTOs;
+            return null;
         }
+
+
+
+        // Helper method to retrieve image as base64
+
     }
 }
-

@@ -8,6 +8,9 @@ using ReimbursementTrackerApp.Exceptions;
 
 namespace ReimbursementTrackerApp.Controllers
 {
+    /// <summary>
+    /// Controller for managing tracking-related operations through RESTful API.
+    /// </summary>
     [ApiController]
     [Route("api/[controller]")]
     [EnableCors("reactApp")]
@@ -15,12 +18,23 @@ namespace ReimbursementTrackerApp.Controllers
     {
         private readonly ITrackingService _trackingService;
         private readonly ILogger<TrackingController> _logger;
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TrackingController"/> class.
+        /// </summary>
+        /// <param name="trackingService">The service for managing tracking-related operations.</param>
+        /// <param name="logger">The logger for logging events in the controller.</param>
         public TrackingController(ITrackingService trackingService, ILogger<TrackingController> logger)
         {
             _trackingService = trackingService;
             _logger = logger;
         }
+
+
+        /// <summary>
+        /// Adds tracking information.
+        /// </summary>
+        /// <param name="trackingDTO">The data for tracking information.</param>
+        /// <returns>The result of the tracking addition operation.</returns>
 
         [HttpPost]
         public IActionResult AddTracking([FromBody] TrackingDTO trackingDTO)
@@ -48,6 +62,11 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        /// <summary>
+        /// Removes tracking information by ID.
+        /// </summary>
+        /// <param name="trackingId">The ID of the tracking information to be removed.</param>
+        /// <returns>The result of the tracking removal operation.</returns>
 
         [HttpDelete("{trackingId}")]
         public ActionResult RemoveTracking(int trackingId)
@@ -82,6 +101,11 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        /// <summary>
+        /// Updates tracking information.
+        /// </summary>
+        /// <param name="trackingDTO">The data for updating tracking information.</param>
+        /// <returns>The result of the tracking update operation.</returns>
 
         [HttpPut]
         public IActionResult UpdateTracking([FromBody] TrackingDTO trackingDTO)
@@ -116,6 +140,11 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        /// <summary>
+        /// Gets tracking information by ID.
+        /// </summary>
+        /// <param name="trackingId">The ID of the tracking information to be retrieved.</param>
+        /// <returns>The result of the tracking retrieval operation.</returns>
 
         [HttpGet("{trackingId}")]
         public IActionResult GetTrackingById(int trackingId)
@@ -150,6 +179,10 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        /// <summary>
+        /// Gets all tracking information.
+        /// </summary>
+        /// <returns>The result of the operation to get all tracking information.</returns>
 
         [HttpGet]
         public IActionResult GetAllTrackings()
@@ -173,6 +206,12 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        /// <summary>
+        /// Updates the tracking status for a specific request.
+        /// </summary>
+        /// <param name="requestId">The ID of the request to update the tracking status for.</param>
+        /// <param name="trackingStatus">The new tracking status.</param>
+        /// <returns>The result of the tracking status update operation.</returns>
 
         [HttpPut("{requestId}/{trackingStatus}")]
         public IActionResult UpdateTrackingStatus(int requestId, string trackingStatus)
@@ -200,6 +239,11 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        /// <summary>
+        /// Gets tracking information by request ID.
+        /// </summary>
+        /// <param name="requestId">The ID of the request associated with the tracking information.</param>
+        /// <returns>The result of the tracking retrieval by request ID operation.</returns>
 
         [HttpGet("request/{requestId}")]
         public IActionResult GetTrackingByRequestId(int requestId)
@@ -236,4 +280,3 @@ namespace ReimbursementTrackerApp.Controllers
         }
     }
 }
-
