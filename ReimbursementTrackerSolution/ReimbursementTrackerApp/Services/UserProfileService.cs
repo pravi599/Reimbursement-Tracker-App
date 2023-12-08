@@ -2,18 +2,32 @@
 using ReimbursementTrackerApp.Models.DTOs;
 using ReimbursementTrackerApp.Models;
 using ReimbursementTrackerApp.Exceptions;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ReimbursementTrackerApp.Services
 {
+    /// <summary>
+    /// Service class for managing user profiles.
+    /// </summary>
     public class UserProfileService : IUserProfileService
     {
         private readonly IRepository<int, UserProfile> _userProfileRepository;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserProfileService"/> class.
+        /// </summary>
+        /// <param name="userProfileRepository">The repository for user profiles.</param>
         public UserProfileService(IRepository<int, UserProfile> userProfileRepository)
         {
             _userProfileRepository = userProfileRepository;
         }
 
+        /// <summary>
+        /// Adds a new user profile.
+        /// </summary>
+        /// <param name="userProfileDTO">User profile information for addition.</param>
+        /// <returns>Returns true if the addition is successful; otherwise, throws a UserProfileAlreadyExistsException.</returns>
         public bool Add(UserProfileDTO userProfileDTO)
         {
             var existingProfile = _userProfileRepository.GetAll()
@@ -39,6 +53,11 @@ namespace ReimbursementTrackerApp.Services
             throw new UserProfileAlreadyExistsException();
         }
 
+        /// <summary>
+        /// Removes a user profile by username.
+        /// </summary>
+        /// <param name="username">The username associated with the user profile to be removed.</param>
+        /// <returns>Returns true if the removal is successful; otherwise, throws a UserProfileNotFoundException.</returns>
         public bool Remove(string username)
         {
             var userProfile = _userProfileRepository.GetAll()
@@ -53,6 +72,11 @@ namespace ReimbursementTrackerApp.Services
             throw new UserProfileNotFoundException();
         }
 
+        /// <summary>
+        /// Updates an existing user profile.
+        /// </summary>
+        /// <param name="userProfileDTO">Updated user profile information.</param>
+        /// <returns>Returns the updated UserProfileDTO if the update is successful; otherwise, throws a UserProfileNotFoundException.</returns>
         public UserProfileDTO Update(UserProfileDTO userProfileDTO)
         {
             var existingProfile = _userProfileRepository.GetById(userProfileDTO.UserId);
@@ -82,6 +106,11 @@ namespace ReimbursementTrackerApp.Services
             throw new UserProfileNotFoundException();
         }
 
+        /// <summary>
+        /// Gets a user profile by user ID.
+        /// </summary>
+        /// <param name="userId">The ID of the user profile to retrieve.</param>
+        /// <returns>Returns the UserProfileDTO if the user profile is found; otherwise, throws a UserProfileNotFoundException.</returns>
         public UserProfileDTO GetUserProifleById(int userId)
         {
             var userProfile = _userProfileRepository.GetById(userId);
@@ -103,7 +132,12 @@ namespace ReimbursementTrackerApp.Services
             throw new UserProfileNotFoundException();
         }
 
-        public UserProfileDTO GetUserProifleByUsername(string username)
+        /// <summary>
+        /// Gets a user profile by username.
+        /// </summary>
+        /// <param name="username">The username associated with the user profile to retrieve.</param>
+        /// <returns>Returns the UserProfileDTO if the user profile is found; otherwise, throws a UserProfileNotFoundException.</returns>
+        public UserProfileDTO GetUserProfileByUsername(string username)
         {
             var userProfile = _userProfileRepository.GetAll()
                 .FirstOrDefault(u => u.Username == username);
@@ -125,6 +159,10 @@ namespace ReimbursementTrackerApp.Services
             throw new UserProfileNotFoundException();
         }
 
+        /// <summary>
+        /// Gets all user profiles.
+        /// </summary>
+        /// <returns>Returns a collection of UserProfileDTO representing all user profiles.</returns>
         public IEnumerable<UserProfileDTO> GetAllUserProfiles()
         {
             var userProfiles = _userProfileRepository.GetAll();
@@ -142,4 +180,3 @@ namespace ReimbursementTrackerApp.Services
         }
     }
 }
-

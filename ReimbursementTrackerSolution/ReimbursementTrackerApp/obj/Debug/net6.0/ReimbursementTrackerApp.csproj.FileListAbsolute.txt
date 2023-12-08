@@ -251,3 +251,5 @@ D:\Project\ReimbursementTrackerSolution\ReimbursementTrackerApp\bin\Debug\net6.0
 D:\Project\ReimbursementTrackerSolution\ReimbursementTrackerApp\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 D:\Project\ReimbursementTrackerSolution\ReimbursementTrackerApp\bin\Debug\net6.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 D:\Project\ReimbursementTrackerSolution\ReimbursementTrackerApp\bin\Debug\net6.0\log4net.config
+D:\Project\ReimbursementTrackerSolution\ReimbursementTrackerApp\obj\Debug\net6.0\ReimbursementTrackerApp.sourcelink.json
+D:\Project\ReimbursementTrackerSolution\ReimbursementTrackerApp\bin\Debug\net6.0\ReimbursementTrackerApp.staticwebassets.runtime.json

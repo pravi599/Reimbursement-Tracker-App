@@ -8,17 +8,30 @@ using ReimbursementTrackerApp.Models.DTOs;
 
 namespace ReimbursementTrackerApp.Controllers
 {
+    /// <summary>
+    /// Controller for managing user-related operations through RESTful API.
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [EnableCors("reactApp")]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UserController"/> class.
+        /// </summary>
+        /// <param name="userService">The service for managing user-related operations.</param>
 
         public UserController(IUserService userService)
         {
             _userService = userService;
         }
+        /// <summary>
+        /// Registers a new user.
+        /// </summary>
+        /// <param name="viewModel">The data for user registration.</param>
+        /// <returns>The result of the registration operation.</returns>
+
         [HttpPost]
         public ActionResult Register(UserDTO viewModel)
         {
@@ -43,6 +56,11 @@ namespace ReimbursementTrackerApp.Controllers
 
             return BadRequest(message);
         }
+        /// <summary>
+        /// Logs in a user.
+        /// </summary>
+        /// <param name="userDTO">The data for user login.</param>
+        /// <returns>The result of the login operation.</returns>
 
         [HttpPost]
         [Route("Login")]//attribute based routing

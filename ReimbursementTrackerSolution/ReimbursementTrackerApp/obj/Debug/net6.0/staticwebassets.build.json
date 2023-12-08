@@ -1,11 +1,19 @@
 {
   "Version": 1,
-  "Hash": "UeEPk9ZEhxHFqq9EaS4t32CqCdwdFxLwkLlCe/R51fE=",
+  "Hash": "6neQEtUwuDkwSLxsheJDS9gj9tAgcO0nzDNCgl6DeoE=",
   "Source": "ReimbursementTrackerApp",
   "BasePath": "_content/ReimbursementTrackerApp",
   "Mode": "Default",
   "ManifestType": "Build",
   "ReferencedProjectsConfiguration": [],
-  "DiscoveryPatterns": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "ReimbursementTrackerApp\\wwwroot",
+      "Source": "ReimbursementTrackerApp",
+      "ContentRoot": "D:\\Project\\ReimbursementTrackerSolution\\ReimbursementTrackerApp\\wwwroot\\",
+      "BasePath": "_content/ReimbursementTrackerApp",
+      "Pattern": "**"
+    }
+  ],
   "Assets": []
 }

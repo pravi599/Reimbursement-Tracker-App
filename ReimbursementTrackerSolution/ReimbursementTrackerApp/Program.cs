@@ -50,7 +50,7 @@ namespace ReimbursementTrackerApp
                  });
             });
             #endregion
-            
+
             #region CORS
             builder.Services.AddCors(options =>
             {
@@ -95,7 +95,7 @@ namespace ReimbursementTrackerApp
             builder.Services.AddScoped<IUserService, UserService>();
             builder.Services.AddScoped<ITokenService, TokenService>();
             builder.Services.AddScoped<IRequestService, RequestService>();
-            builder.Services.AddScoped<ITrackingService ,TrackingService>();
+            builder.Services.AddScoped<ITrackingService, TrackingService>();
             builder.Services.AddScoped<IUserProfileService, UserProfileService>();
             builder.Services.AddScoped<IPaymentDetailsService, PaymentDetailsService>();
 

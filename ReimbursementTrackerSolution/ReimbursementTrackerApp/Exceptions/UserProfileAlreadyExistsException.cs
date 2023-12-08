@@ -3,7 +3,7 @@
 namespace ReimbursementTrackerApp.Exceptions
 {
     [Serializable]
-    internal class UserProfileAlreadyExistsException : Exception
+    public class UserProfileAlreadyExistsException : Exception
     {
         string message;
         public UserProfileAlreadyExistsException()
