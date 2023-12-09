@@ -14,7 +14,7 @@ namespace ReimbursementTrackerApp.Models
         public float PaymentAmount { get; set; }
         public DateTime PaymentDate { get; set; }
         [ForeignKey("RequestId")]
-        public Request Request { get; set; }
+        public Request? Request { get; set; }
     }
       
 }

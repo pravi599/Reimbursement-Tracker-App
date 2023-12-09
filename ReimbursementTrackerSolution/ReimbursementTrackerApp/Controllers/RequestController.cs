@@ -44,11 +44,6 @@ namespace ReimbursementTrackerApp.Controllers
                 var result = _requestService.Add(requestDTO);
                 return Ok(result);
             }
-            catch (UserNotFoundException ex)
-            {
-                _logger.LogError(ex, "Failed to add request due to user not found.");
-                return NotFound($"Failed to add request. {ex.Message}");
-            }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error adding request.");

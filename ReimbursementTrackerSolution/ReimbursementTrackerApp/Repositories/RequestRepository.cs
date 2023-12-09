@@ -31,7 +31,6 @@ namespace ReimbursementTrackerApp.Repositories
         public Request GetById(int requestId)
         {
             return _context.Requests
-                .Include(r => r.User)
                 .FirstOrDefault(r => r.RequestId == requestId);
         }
 
@@ -42,7 +41,6 @@ namespace ReimbursementTrackerApp.Repositories
         public IList<Request> GetAll()
         {
             return _context.Requests
-                .Include(r => r.User)
                 .ToList();
         }
 

@@ -18,6 +18,6 @@ namespace ReimbursementTrackerApp.Models
         public string Role { get; set; }
 
         // Navigation properties
-        public ICollection<Request> Requests{ get; set; }
+        public ICollection<Request>? Requests{ get; set; }
     }
 }

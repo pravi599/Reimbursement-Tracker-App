@@ -31,7 +31,6 @@ namespace ReimbursementTrackerApp.Repositories
         public UserProfile GetById(int userId)
         {
             return _context.UserProfiles
-                .Include(u => u.User)
                 .FirstOrDefault(u => u.UserId == userId);
         }
 
@@ -42,7 +41,6 @@ namespace ReimbursementTrackerApp.Repositories
         public IList<UserProfile> GetAll()
         {
             return _context.UserProfiles
-                .Include(u => u.User)
                 .ToList();
         }
 

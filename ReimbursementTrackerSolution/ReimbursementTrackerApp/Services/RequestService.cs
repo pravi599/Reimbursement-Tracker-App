@@ -9,58 +9,46 @@ namespace ReimbursementTrackerApp.Services
     {
         private readonly IRepository<int, Request> _requestRepository;
         private readonly IRepository<int, Tracking> _trackingRepository;
-        private readonly IRepository<string, User> _userRepository;
         private readonly IWebHostEnvironment _hostingEnvironment;
 
         public RequestService(
             IRepository<int, Request> requestRepository,
             IRepository<int, Tracking> trackingRepository,
-            IRepository<string, User> userRepository,
             IWebHostEnvironment hostingEnvironment)
         {
             _requestRepository = requestRepository;
             _trackingRepository = trackingRepository;
-            _userRepository = userRepository;
             _hostingEnvironment = hostingEnvironment; // Assign IWebHostEnvironment
         }
 
 
         public bool Add(RequestDTO requestDTO)
         {
-            var user = _userRepository.GetAll()
-                .FirstOrDefault(r => r.Username == requestDTO.Username);
+            var documentPath = SaveDocument(requestDTO.Document);
 
-            if (user != null)
+            var request = new Request
             {
-                // Handle file upload separately
-                var documentPath = SaveDocument(requestDTO.Document);
+                ExpenseCategory = requestDTO.ExpenseCategory,
+                Amount = requestDTO.Amount,
+                Document = documentPath,
+                Description = requestDTO.Description,
+                RequestDate = DateTime.Now,
+                Username = requestDTO.Username
+            };
 
-                var request = new Request
-                {
-                    ExpenseCategory = requestDTO.ExpenseCategory,
-                    Amount = requestDTO.Amount,
-                    Document = documentPath,
-                    Description = requestDTO.Description,
-                    RequestDate = DateTime.Now,
-                    Username = requestDTO.Username
-                };
+            _requestRepository.Add(request);
 
-                _requestRepository.Add(request);
+            var tracking = new Tracking
+            {
+                TrackingStatus = "Pending",
+                ApprovalDate = null,
+                ReimbursementDate = null,
+                Request = request
+            };
 
-                var tracking = new Tracking
-                {
-                    TrackingStatus = "Pending",
-                    ApprovalDate = null,
-                    ReimbursementDate = null,
-                    Request = request
-                };
+            _trackingRepository.Add(tracking);
 
-                _trackingRepository.Add(tracking);
-
-                return true;
-            }
-
-            throw new UserNotFoundException();
+            return true;
         }
 
 

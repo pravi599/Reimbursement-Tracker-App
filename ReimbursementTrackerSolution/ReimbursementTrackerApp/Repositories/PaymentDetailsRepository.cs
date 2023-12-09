@@ -31,7 +31,6 @@ namespace ReimbursementTrackerApp.Repositories
         public PaymentDetails GetById(int paymentId)
         {
             return _context.PaymentDetails
-                .Include(pd => pd.Request)
                 .FirstOrDefault(pd => pd.PaymentId == paymentId);
         }
 
@@ -42,7 +41,6 @@ namespace ReimbursementTrackerApp.Repositories
         public IList<PaymentDetails> GetAll()
         {
             return _context.PaymentDetails
-                .Include(pd => pd.Request)
                 .ToList();
         }
 

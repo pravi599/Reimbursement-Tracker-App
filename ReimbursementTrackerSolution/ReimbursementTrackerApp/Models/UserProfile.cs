@@ -15,6 +15,6 @@ namespace ReimbursementTrackerApp.Models
         public string BankAccountNumber { get; set; }
 
         [ForeignKey("Username")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

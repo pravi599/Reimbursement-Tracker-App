@@ -10,7 +10,7 @@ namespace ReimbursementTrackerApp.Models
         public int RequestId {  get; set; }
 
         [ForeignKey("RequestId")]
-        public Request Request { get; set; }
+        public Request? Request { get; set; }
         public string TrackingStatus { get; set;}
         public DateTime? ApprovalDate { get; set; }
         public DateTime? ReimbursementDate { get; set; }

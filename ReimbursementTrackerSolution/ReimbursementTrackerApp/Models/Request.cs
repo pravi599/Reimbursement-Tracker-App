@@ -11,11 +11,11 @@ namespace ReimbursementTrackerApp.Models
         [Required]
         public string ExpenseCategory { get; set; }
         public float Amount { get; set; }
-        public string Document { get; set; }
+        public string? Document { get; set; }
         //public string Receipt { get; set; }
         public string Description { get; set; }
         public DateTime RequestDate { get; set; }
         [ForeignKey("Username")]
-        public User User { get; set; }
+        public User? User { get; set; }
     }
 }

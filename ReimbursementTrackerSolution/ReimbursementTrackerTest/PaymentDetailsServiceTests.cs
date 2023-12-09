@@ -1,104 +1,236 @@
-using System;
-using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using ReimbursementTrackerApp.Contexts;
 using ReimbursementTrackerApp.Exceptions;
-using ReimbursementTrackerApp.Interfaces;
 using ReimbursementTrackerApp.Models;
 using ReimbursementTrackerApp.Models.DTOs;
 using ReimbursementTrackerApp.Repositories;
 using ReimbursementTrackerApp.Services;
+using System;
+using System.Linq;
 
 namespace ReimbursementTrackerApp.Tests
 {
     [TestFixture]
     public class PaymentDetailsServiceTests
     {
-        private PaymentDetailsService _paymentDetailsService;
-        private DbContextOptions<RTAppContext> _dbContextOptions;
+        private PaymentDetailsService paymentDetailsService;
+        private PaymentDetailsRepository paymentDetailsRepository;
 
         [SetUp]
         public void Setup()
         {
-            _dbContextOptions = new DbContextOptionsBuilder<RTAppContext>()
-                .UseInMemoryDatabase(databaseName: Guid.NewGuid().ToString()) // Use a unique database name
-                .Options;
+            var dbOptions = new DbContextOptionsBuilder<RTAppContext>()
+                                .UseInMemoryDatabase("dbTestPaymentDetails")
+                                .Options;
 
-            var dbContext = new RTAppContext(_dbContextOptions);
-            var paymentDetailsRepository = new PaymentDetailsRepository(dbContext);
-            _paymentDetailsService = new PaymentDetailsService(paymentDetailsRepository);
+            RTAppContext context = new RTAppContext(dbOptions);
+            paymentDetailsRepository = new PaymentDetailsRepository(context);
+            paymentDetailsService = new PaymentDetailsService(paymentDetailsRepository);
         }
 
         [Test]
-        public void Add_PaymentDetails_Successful()
+        public void AddPaymentDetails_Success()
         {
             // Arrange
             var paymentDetailsDTO = new PaymentDetailsDTO
             {
+                RequestId = 1,
                 PaymentId = 1,
-                RequestId = 100,
-                PaymentAmount = 5000,
-                PaymentDate = DateTime.Now,
                 CardNumber = "1234567812345678",
                 ExpiryDate = "12/25",
-                CVV = "123"
+                CVV = "123",
+                PaymentAmount = 100.00f,
+                PaymentDate = DateTime.Now
             };
 
             // Act
-            var result = _paymentDetailsService.Add(paymentDetailsDTO);
+            var result = paymentDetailsService.Add(paymentDetailsDTO);
 
             // Assert
             Assert.IsTrue(result);
-
-            // Validate the state of the database after the addition
-            using (var context = new RTAppContext(_dbContextOptions))
-            {
-                var paymentDetailsInDatabase = context.PaymentDetails.First();
-                Assert.AreEqual(1, context.PaymentDetails.Count());
-                Assert.AreEqual(paymentDetailsDTO.PaymentId, paymentDetailsInDatabase.PaymentId);
-                Assert.AreEqual(paymentDetailsDTO.RequestId, paymentDetailsInDatabase.RequestId);
-                Assert.AreEqual(paymentDetailsDTO.PaymentAmount, paymentDetailsInDatabase.PaymentAmount);
-                Assert.AreEqual(paymentDetailsDTO.PaymentDate, paymentDetailsInDatabase.PaymentDate);
-                Assert.AreEqual(paymentDetailsDTO.CardNumber, paymentDetailsInDatabase.CardNumber);
-                Assert.AreEqual(paymentDetailsDTO.ExpiryDate, paymentDetailsInDatabase.ExpiryDate);
-                Assert.AreEqual(paymentDetailsDTO.CVV, paymentDetailsInDatabase.CVV);
-            }
         }
 
         [Test]
-        public void Add_PaymentDetails_PaymentDetailsAlreadyExistsException()
+        public void AddPaymentDetails_DuplicatePaymentId_ThrowsException()
         {
             // Arrange
             var paymentDetailsDTO = new PaymentDetailsDTO
             {
+                RequestId = 1,
                 PaymentId = 1,
-                RequestId = 100,
-                PaymentAmount = 5000,
-                PaymentDate = DateTime.Now,
                 CardNumber = "1234567812345678",
                 ExpiryDate = "12/25",
-                CVV = "123"
+                CVV = "123",
+                PaymentAmount = 100.00f,
+                PaymentDate = DateTime.Now
             };
 
-            // Act
-            _paymentDetailsService.Add(paymentDetailsDTO);
+            // Add the first payment details
+            paymentDetailsService.Add(paymentDetailsDTO);
 
-            // Assert
-            Assert.Throws<PaymentDetailsAlreadyExistsException>(() => _paymentDetailsService.Add(paymentDetailsDTO));
+            // Act & Assert
+            Assert.Throws<PaymentDetailsAlreadyExistsException>(() => paymentDetailsService.Add(paymentDetailsDTO));
         }
 
-        // Add similar tests for Remove, Update, GetPaymentDetailsById, and GetAllPaymentDetails
-        // ...
-
-        [TearDown]
-        public void TearDown()
+        [Test]
+        public void RemovePaymentDetails_Success()
         {
-            // Clean up the database after each test
-            using (var context = new RTAppContext(_dbContextOptions))
+            // Arrange
+            var paymentDetailsDTO = new PaymentDetailsDTO
             {
-                context.Database.EnsureDeleted();
-            }
+                RequestId = 1,
+                PaymentId = 1,
+                CardNumber = "1234567812345678",
+                ExpiryDate = "12/25",
+                CVV = "123",
+                PaymentAmount = 100.00f,
+                PaymentDate = DateTime.Now
+            };
+
+            // Add the payment details
+            paymentDetailsService.Add(paymentDetailsDTO);
+
+            // Act
+            var result = paymentDetailsService.Remove(1);
+
+            // Assert
+            Assert.IsTrue(result);
+        }
+
+        [Test]
+        public void RemovePaymentDetails_NotFound_ThrowsException()
+        {
+            // Act & Assert
+            Assert.Throws<PaymentDetailsNotFoundException>(() => paymentDetailsService.Remove(999));
+        }
+
+        [Test]
+        public void UpdatePaymentDetails_Success()
+        {
+            // Arrange
+            var paymentDetailsDTO = new PaymentDetailsDTO
+            {
+                RequestId = 1,
+                PaymentId = 1,
+                CardNumber = "1234567812345678",
+                ExpiryDate = "12/25",
+                CVV = "123",
+                PaymentAmount = 100.00f,
+                PaymentDate = DateTime.Now
+            };
+
+            var updatedPaymentDetailsDTO = new PaymentDetailsDTO
+            {
+                RequestId = 1,
+                PaymentId = 1,
+                CardNumber = "5678123456781234",
+                ExpiryDate = "01/26",
+                CVV = "456",
+                PaymentAmount = 150.00f,
+                PaymentDate = DateTime.Now.AddDays(1)
+            };
+
+            // Add the payment details
+            paymentDetailsService.Add(paymentDetailsDTO);
+
+            // Act
+            var updatedPaymentDetails = paymentDetailsService.Update(updatedPaymentDetailsDTO);
+
+            // Assert
+            Assert.AreEqual(150.00f, updatedPaymentDetails.PaymentAmount);
+            Assert.AreEqual("5678123456781234", updatedPaymentDetails.CardNumber);
+        }
+
+        [Test]
+        public void UpdatePaymentDetails_NotFound_ThrowsException()
+        {
+            // Arrange
+            var paymentDetailsDTO = new PaymentDetailsDTO
+            {
+                RequestId = 1,
+                PaymentId = 1,
+                CardNumber = "1234567812345678",
+                ExpiryDate = "12/25",
+                CVV = "123",
+                PaymentAmount = 100.00f,
+                PaymentDate = DateTime.Now
+            };
+
+            // Act & Assert
+            Assert.Throws<PaymentDetailsNotFoundException>(() => paymentDetailsService.Update(paymentDetailsDTO));
+        }
+
+        [Test]
+        public void GetPaymentDetailsById_Success()
+        {
+            // Arrange
+            var paymentDetailsDTO = new PaymentDetailsDTO
+            {
+                RequestId = 1,
+                PaymentId = 1,
+                CardNumber = "1234567812345678",
+                ExpiryDate = "12/25",
+                CVV = "123",
+                PaymentAmount = 100.00f,
+                PaymentDate = DateTime.Now
+            };
+
+            // Add the payment details
+            paymentDetailsService.Add(paymentDetailsDTO);
+
+            // Act
+            var retrievedPaymentDetails = paymentDetailsService.GetPaymentDetailsById(paymentDetailsDTO.PaymentId);
+
+            // Assert
+            Assert.IsNotNull(retrievedPaymentDetails, "Failed to retrieve payment details.");
+            Assert.AreEqual("1234567812345678", retrievedPaymentDetails.CardNumber);
+        }
+
+
+
+        [Test]
+        public void GetPaymentDetailsById_NotFound_ThrowsException()
+        {
+            // Act & Assert
+            Assert.Throws<PaymentDetailsNotFoundException>(() => paymentDetailsService.GetPaymentDetailsById(999));
+        }
+
+        [Test]
+        public void GetAllPaymentDetails_Success()
+        {
+            // Arrange
+            var paymentDetailsDTO1 = new PaymentDetailsDTO
+            {
+                RequestId = 1,
+                PaymentId = 1,
+                CardNumber = "1234567812345678",
+                ExpiryDate = "12/25",
+                CVV = "123",
+                PaymentAmount = 100.00f,
+                PaymentDate = DateTime.Now
+            };
+
+            var paymentDetailsDTO2 = new PaymentDetailsDTO
+            {
+                RequestId = 2,
+                PaymentId = 2,
+                CardNumber = "5678123456781234",
+                ExpiryDate = "01/26",
+                CVV = "456",
+                PaymentAmount = 150.00f,
+                PaymentDate = DateTime.Now.AddDays(1)
+            };
+
+            // Add the payment details
+            paymentDetailsService.Add(paymentDetailsDTO1);
+            paymentDetailsService.Add(paymentDetailsDTO2);
+
+            // Act
+            var allPaymentDetails = paymentDetailsService.GetAllPaymentDetails();
+
+            // Assert
+            Assert.AreEqual(2, allPaymentDetails.Count());
         }
     }
 }

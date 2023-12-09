@@ -74,7 +74,6 @@ namespace ReimbursementTrackerApp.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Document")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ExpenseCategory")
