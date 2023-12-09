@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "D:\\Project\\ReimbursementTrackerSolution\\ReimbursementTrackerApp\\wwwroot\\Documents\\74813b53-63c0-48d3-b3c0-073408f9f760_TutionFees.png",
+      "PackagePath": "staticwebassets\\Documents\\74813b53-63c0-48d3-b3c0-073408f9f760_TutionFees.png"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.ReimbursementTrackerApp.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.build.ReimbursementTrackerApp.props",
+      "PackagePath": "build\\ReimbursementTrackerApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildMultiTargeting.ReimbursementTrackerApp.props",
+      "PackagePath": "buildMultiTargeting\\ReimbursementTrackerApp.props"
+    },
+    {
+      "Id": "obj\\Debug\\net6.0\\staticwebassets\\msbuild.buildTransitive.ReimbursementTrackerApp.props",
+      "PackagePath": "buildTransitive\\ReimbursementTrackerApp.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

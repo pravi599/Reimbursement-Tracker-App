@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "6neQEtUwuDkwSLxsheJDS9gj9tAgcO0nzDNCgl6DeoE=",
+  "Hash": "txqG5sk9tK8Z5MYxR07//CP8eczv/uyPaZJwFD8EhXs=",
   "Source": "ReimbursementTrackerApp",
   "BasePath": "_content/ReimbursementTrackerApp",
   "Mode": "Default",
@@ -15,5 +15,25 @@
       "Pattern": "**"
     }
   ],
-  "Assets": []
+  "Assets": [
+    {
+      "Identity": "D:\\Project\\ReimbursementTrackerSolution\\ReimbursementTrackerApp\\wwwroot\\Documents\\74813b53-63c0-48d3-b3c0-073408f9f760_TutionFees.png",
+      "SourceId": "ReimbursementTrackerApp",
+      "SourceType": "Discovered",
+      "ContentRoot": "D:\\Project\\ReimbursementTrackerSolution\\ReimbursementTrackerApp\\wwwroot\\",
+      "BasePath": "_content/ReimbursementTrackerApp",
+      "RelativePath": "Documents/74813b53-63c0-48d3-b3c0-073408f9f760_TutionFees.png",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Documents\\74813b53-63c0-48d3-b3c0-073408f9f760_TutionFees.png"
+    }
+  ]
 }
