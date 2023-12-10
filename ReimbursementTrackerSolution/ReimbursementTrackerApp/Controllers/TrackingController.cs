@@ -278,5 +278,43 @@ namespace ReimbursementTrackerApp.Controllers
                 return StatusCode(500, "Internal server error");
             }
         }
+        /// <summary>
+        /// Gets tracking information for a particular user by username.
+        /// </summary>
+        /// <param name="username">The username of the user.</param>
+        /// <returns>The result of the tracking retrieval by username operation.</returns>
+        [HttpGet("user/{username}")]
+        public IActionResult GetTrackingsByUsername(string username)
+        {
+            _logger.LogInformation($"Getting trackings for user: {username}.");
+
+            try
+            {
+                var trackingDTOs = _trackingService.GetTrackingsByUsername(username);
+
+                if (trackingDTOs != null && trackingDTOs.Any())
+                {
+                    _logger.LogInformation($"Trackings listed for user: {username}");
+                    return Ok(trackingDTOs);
+                }
+
+                return NotFound($"No trackings found for user: {username}");
+            }
+            catch (TrackingNotFoundException ex)
+            {
+                _logger.LogError(ex, $"Failed to get trackings by username.");
+                return NotFound($"Failed to get trackings by username. {ex.Message}");
+            }
+            catch (ServiceException ex)
+            {
+                _logger.LogError(ex, "Error getting trackings by username.");
+                return StatusCode(500, $"Failed to get trackings by username. {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An unexpected error occurred while getting trackings by username.");
+                return StatusCode(500, "Internal server error");
+            }
+        }
     }
 }

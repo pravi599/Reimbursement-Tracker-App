@@ -8,7 +8,7 @@ namespace ReimbursementTrackerApp.Exceptions
         string message;
         public ServiceException()
         {
-            message = "Error occurred while performing oepations on tracking";
+            message = "Error occurred while performing operations on tracking";
         }
         public override string Message => message;
 

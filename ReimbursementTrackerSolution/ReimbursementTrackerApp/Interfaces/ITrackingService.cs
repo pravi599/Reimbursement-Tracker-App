@@ -56,5 +56,12 @@ namespace ReimbursementTrackerApp.Interfaces
         /// </summary>
         /// <returns>An IEnumerable of TrackingDTO representing all tracking information.</returns>
         IEnumerable<TrackingDTO> GetAllTrackings();
+
+        /// <summary>
+        /// Gets tracking information for a particular user by username.
+        /// </summary>
+        /// <param name="username">The username of the user.</param>
+        /// <returns>An IEnumerable of TrackingDTO representing tracking information for the specified user.</returns>
+        IEnumerable<TrackingDTO> GetTrackingsByUsername(string username);
     }
 }

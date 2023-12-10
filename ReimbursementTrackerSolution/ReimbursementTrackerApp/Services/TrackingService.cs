@@ -15,14 +15,17 @@ namespace ReimbursementTrackerApp.Services
     public class TrackingService : ITrackingService
     {
         private readonly IRepository<int, Tracking> _trackingRepository;
+        private readonly IRepository<int, Request> _requestRepository;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TrackingService"/> class.
         /// </summary>
         /// <param name="trackingRepository">The repository for tracking information.</param>
-        public TrackingService(IRepository<int, Tracking> trackingRepository)
+        public TrackingService(IRepository<int, Tracking> trackingRepository, 
+                               IRepository<int, Request> requestRepository)
         {
             _trackingRepository = trackingRepository;
+            _requestRepository = requestRepository;
         }
 
         /// <summary>
@@ -252,6 +255,54 @@ namespace ReimbursementTrackerApp.Services
                 }
 
                 throw new TrackingNotFoundException();
+            }
+            catch (Exception)
+            {
+                // Log the exception or handle it as needed
+                throw new ServiceException();
+            }
+        }
+
+        /// <summary>
+        /// Gets tracking information for a particular user by username.
+        /// </summary>
+        /// <param name="username">The username of the user.</param>
+        /// <returns>Returns a collection of TrackingDTO representing tracking information for the specified user.</returns>
+        public IEnumerable<TrackingDTO> GetTrackingsByUsername(string username)
+        {
+            try
+            {
+                // Assuming there's a relationship between Request and Tracking based on RequestId
+                var userRequests = _requestRepository.GetAll().Where(r => r.Username == username);
+
+                if (userRequests.Any())
+                {
+                    var trackingDTOs = new List<TrackingDTO>();
+                    foreach (var request in userRequests)
+                    {
+                        var existingTracking = _trackingRepository.GetAll()
+                            .FirstOrDefault(t => t.RequestId == request.RequestId);
+
+                        if (existingTracking != null)
+                        {
+                            trackingDTOs.Add(new TrackingDTO
+                            {
+                                TrackingId = existingTracking.TrackingId,
+                                RequestId = existingTracking.RequestId,
+                                TrackingStatus = existingTracking.TrackingStatus,
+                                ApprovalDate = existingTracking.ApprovalDate,
+                                ReimbursementDate = existingTracking.ReimbursementDate
+                            });
+                        }
+                    }
+
+                    if (trackingDTOs.Any())
+                    {
+                        return trackingDTOs;
+                    }
+                }
+
+                throw new TrackingNotFoundException(); // Or handle accordingly
             }
             catch (Exception)
             {

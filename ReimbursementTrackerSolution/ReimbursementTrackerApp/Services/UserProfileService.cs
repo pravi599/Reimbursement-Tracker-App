@@ -111,7 +111,7 @@ namespace ReimbursementTrackerApp.Services
         /// </summary>
         /// <param name="userId">The ID of the user profile to retrieve.</param>
         /// <returns>Returns the UserProfileDTO if the user profile is found; otherwise, throws a UserProfileNotFoundException.</returns>
-        public UserProfileDTO GetUserProifleById(int userId)
+        public UserProfileDTO GetUserProfileById(int userId)
         {
             var userProfile = _userProfileRepository.GetById(userId);
 

@@ -137,7 +137,7 @@ namespace ReimbursementTrackerApp.Controllers
 
             try
             {
-                var userProfileDTO = _userProfileService.GetUserProifleById(userId);
+                var userProfileDTO = _userProfileService.GetUserProfileById(userId);
 
                 if (userProfileDTO != null)
                 {

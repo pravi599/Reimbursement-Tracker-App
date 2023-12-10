@@ -171,20 +171,23 @@ public class UserProfileServiceTests
         };
 
         // Add the profile
-        var addedProfile = userProfileService.Add(userProfileDTO);
+        var isAdded = userProfileService.Add(userProfileDTO);
 
         // Act
-        //  var retrievedProfile = userProfileService.GetUserProifleById(addedProfile.UserId);
+        var retrievedProfile = userProfileService.GetUserProfileById(1); // Assuming 1 is the ID of the added profile
 
         // Assert
-        // Assert.AreEqual("John", retrievedProfile.FirstName);
+        Assert.IsTrue(isAdded, "Failed to add user profile.");
+        Assert.IsNotNull(retrievedProfile, "Failed to retrieve user profile by ID.");
+        Assert.AreEqual("John", retrievedProfile.FirstName);
     }
+
 
     [Test]
     public void GetUserProfileById_NotFound_ThrowsException()
     {
         // Act & Assert
-        Assert.Throws<UserProfileNotFoundException>(() => userProfileService.GetUserProifleById(999));
+        Assert.Throws<UserProfileNotFoundException>(() => userProfileService.GetUserProfileById(999));
     }
 
     [Test]
