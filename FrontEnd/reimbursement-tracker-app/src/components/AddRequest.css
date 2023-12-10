@@ -1,0 +1,112 @@
+/* AddRequest.css */
+
+.addRequestContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 20px auto;
+  max-width: 600px; /* Set a max-width for better responsiveness */
+}
+
+.addRequestContainer h2 {
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.checkbox-label input {
+  margin-right: 8px;
+  width: 20px;
+  height: 20px;
+}
+
+.addRequestContainer label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.addRequestContainer select,
+.addRequestContainer input,
+.addRequestContainer textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+.addRequestContainer button {
+  cursor: pointer;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.addRequestContainer button[type="submit"] {
+  background-color: #007bff;
+}
+
+.addRequestContainer button[type="button"] {
+  background-color: #dc3545;
+}
+
+.addRequestContainer div {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.policies {
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  width: 90vw;
+  margin: 0 auto;
+}
+
+.policies h3 {
+  margin-bottom: 10px;
+}
+
+.policies ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.policies ul li {
+  margin-bottom: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-label input {
+  margin-right: 8px;
+}
+.para{
+  text-align: center;
+}
+
+/* Styling for the 'Click to View Policies' button */
+.viewPoliciesButton button [type="button"] {
+  background-color: #28a745;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+/* Media Query for Responsive Design */
+@media (max-width: 768px) {
+  .addRequestContainer {
+    margin: 20px; /* Adjust the margin for smaller screens */
+  }
+
+  .addRequestContainer form {
+    max-width: 100%;
+  }
+}

@@ -1,0 +1,105 @@
+/* Login.css */
+
+/* Common styles for all screen sizes */
+.loginContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.loginBox {
+  border: 1px solid #ced4da;
+  padding: 20px;
+  max-width: 400px; /* Set a maximum width to prevent the form from stretching too much on larger screens */
+  width: 100%;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.loginHeader {
+  text-align: center;
+  margin-bottom: 20px;
+  padding:0px;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  font-weight: bold;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+}
+
+.passwordInput {
+  margin-top: 5px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+}
+
+.alert {
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.button-primary,
+.button-danger {
+  width: 50%; /* Make the button take the full width of the container */
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 20px;
+  margin-top: 10px; /* Add some space between the button and the previous element */
+}
+
+.button-primary:hover,
+.button-danger:hover {
+  background-color: #061b06;
+  color: #fff;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.signup-link a {
+  color: #0275d8;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.signup-link a:hover {
+  text-decoration: underline;
+}
+
+
+
+/* Responsive styles */
+@media (max-width: 768px) {
+  .loginBox {
+    width: 80%;
+  }
+}
+
+@media (max-width: 480px) {
+  .loginBox {
+    width: 90%;
+  }
+}

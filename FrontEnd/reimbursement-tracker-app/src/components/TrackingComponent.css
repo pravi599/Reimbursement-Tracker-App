@@ -1,0 +1,52 @@
+.trackingContainer {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h2 {
+    text-align: center;
+  }
+  
+  .tableContainer {
+    overflow-x: auto;
+  }
+  
+  .trackingTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .trackingTable th, .trackingTable td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+  }
+  
+  .trackingTable th {
+    background-color: #4CAF50; /* Green color for the header */
+    color: white;
+  }
+  
+  .trackingTable tr:hover {
+    background-color: #bce7c4; /* Light gray color on hover */
+  }
+  
+  .trackingTable th, .trackingTable td {
+    transition: background-color 0.3s;
+  }
+  
+  @media (max-width: 600px) {
+    .trackingTable {
+      overflow-x: auto;
+      display: block;
+    }
+  
+    .trackingTable th, .trackingTable td {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  }
+  

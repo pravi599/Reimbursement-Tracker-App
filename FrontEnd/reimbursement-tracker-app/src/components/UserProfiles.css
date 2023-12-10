@@ -1,0 +1,55 @@
+/* UserProfiles.css */
+
+.userProfilesContainer {
+  margin: 10px;
+  padding-top: 5px;
+}
+
+.userProfilesTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+.userProfilesTable th,
+.userProfilesTable td {
+  font-weight: bolder;
+  border: 1px solid #17529a;
+  padding: 8px;
+  text-align: left;
+}
+
+.userProfilesTable th {
+  background-color: #f2f2f2;
+}
+
+
+tbody tr:hover {
+  background-color: #e2e4ba !important; /* Change hover background color as needed */
+}
+
+.error {
+  color: red;
+  margin-top: 10px;
+}
+
+/* Media Query for Responsive Design */
+@media (max-width: 768px) {
+  .userProfilesTable th,
+  .userProfilesTable td {
+    display: block;
+    flex-direction: row;
+    width: 100%;
+    box-sizing: border-box;
+
+  }
+
+  .userProfilesTable th {
+    display:flex; /* Hide table headers in small screens */
+  }
+
+  .userProfilesTable td {
+    border: none;
+    border-bottom: 1px solid #17529a; /* Add bottom border for each table cell */
+  }
+}
